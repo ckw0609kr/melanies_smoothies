@@ -7,6 +7,9 @@ st.title("Example Streamlit App :cup_with_straw:")
 st.write(
     """Choose the fruits you want in your customer Smoothies!
     """)
+name_on_order = st.text_input("Name on Smoothie:")
+st.write("The name on your Smoothie will be:", name_on_order)
+
 cnx=st.connection("snowflake")
 mysession = cnx.session
 my_dataframe = cnx.query("select fruit_name from smoothies.public.fruit_options")
@@ -18,8 +21,8 @@ if ingredients_list:
     ingredients_string = ''
     for fruit_chosen in ingredients_list:
         ingredients_string += fruit_chosen + ' '
-    my_insert_stmt = """ insert into smoothies.public.orders(ingredients)
-            values ('""" + ingredients_string + """')"""
+    my_insert_stmt = """ insert into smoothies.public.orders(ingredients,name_on_order)
+            values ('""" + ingredients_string + """','""" + name_on_order + """')"""
     st.write(my_insert_stmt)
     time_to_insert = st.button("Submit Order")
     if time_to_insert:
